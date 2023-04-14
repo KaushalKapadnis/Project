@@ -11,7 +11,7 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
     public Button bobj_PI,bobj_cos,bobj_log,bobj_4,bobj_5,bobj_6,bobj_mul;
     public Button bobj_e,bobj_tan,bobj_root,bobj_1,bobj_2,bobj_3,bobj_min;
     public Button bobj_ans,bobj_exp,bobj_x_y,bobj_0,bobj_dot,bobj_eq,bobj_plus;
-	public TextField tobj, tobj1;
+    public TextField tobj, tobj1;
 
     public String s = "";
     public String s1 = "";
@@ -68,11 +68,11 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
         bobj_plus = new Button("+");
 
         tobj = new TextField("0");
-		tobj1 = new TextField("0");
+	tobj1 = new TextField("0");
 
         tobj.setBounds(20,40,660,40);
 		
-		tobj1.setBounds(20,85,660,20);
+	tobj1.setBounds(20,85,660,20);
 
         bobj_rad.setBounds(22, 120,85,30);
         bobj_deg.setBounds(117, 120,85,30);
@@ -156,8 +156,6 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
         fobj.add(bobj_eq);
         fobj.add(bobj_plus);
         
-        // fobj.add(tobj2);
-        //tobj.textarea.setAlignmentY(JTextArea.RIGHT_ALIGNMENT);
         fobj.setSize(700,340);
         fobj.setVisible(true);
         fobj.setLayout(null);
@@ -212,7 +210,7 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
     }
 
    public void actionPerformed(ActionEvent obj)
-    {
+   {
         Object oobj = obj.getSource();
         
         if(oobj == bobj_rad)
@@ -563,7 +561,7 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
             double d = this.CalculateExp(this.Stack());
             System.out.println(d);
 			
-			tobj1.setText("ans : " + String.valueOf(d));
+	    tobj1.setText("ans : " + String.valueOf(d));
 
             num = false;
             dot = false;
@@ -579,19 +577,19 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
 		tobj.setText(s);
     }
 	
-	public void Split(String sobj)
+    public void Split(String sobj)
+    {
+	token.clear();
+
+	String tokens[] = sobj.split(",");
+
+	for(int i = 0; i < tokens.length; i++)
 	{
-		token.clear();
-		
-		String tokens[] = sobj.split(",");
-		
-		for(int i = 0; i < tokens.length; i++)
-		{
-			token.add(tokens[i]);
-		}
+		token.add(tokens[i]);
 	}
+    }
 	
-	public int priority(String sobj)
+    public int priority(String sobj)
     {
         if(sobj.equals("+") || sobj.equals("-"))
         {
@@ -601,119 +599,117 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
         {
             return 3;
         }
-		else if(sobj.equals("^"))
-		{
-			return 4;
-		}
-		else if(sobj.equals("!"))
-		{
-			return 5;
-		}
-		else if(sobj.equals("s") || sobj.equals("c") || sobj.equals("t") || sobj.equals("R") || sobj.equals("l") || sobj.equals("i") || sobj.equals("I") || sobj.equals("d") || sobj.equals("r"))
-		{
-			return 6;
-		}
+	else if(sobj.equals("^"))
+	{
+		return 4;
+	}
+	else if(sobj.equals("!"))
+	{
+		return 5;
+	}
+	else if(sobj.equals("s") || sobj.equals("c") || sobj.equals("t") || sobj.equals("R") || sobj.equals("l") || sobj.equals("i") || sobj.equals("I") || sobj.equals("d") || sobj.equals("r"))
+	{
+		return 6;
+	}
         else
         {
             return 1;
         }
     }
 	
-	public boolean isOperator(String sobj)
+    public boolean isOperator(String sobj)
+    {
+	if(sobj.equals("+") || sobj.equals("-") || sobj.equals("*") || sobj.equals("/") || sobj.equals("!") || sobj.equals("^") || sobj.equals("s") || sobj.equals("c") || sobj.equals("t") || sobj.equals("R") || sobj.equals("l") || sobj.equals("i") || sobj.equals("I") || sobj.equals("d") || sobj.equals("r") || sobj.equals("%"))
 	{
-		if
-		(
-		sobj.equals("+") || sobj.equals("-") || sobj.equals("*") || sobj.equals("/") || sobj.equals("!") || sobj.equals("^") || sobj.equals("s") || sobj.equals("c") || sobj.equals("t") || sobj.equals("R") || sobj.equals("l") || sobj.equals("i") || sobj.equals("I") || sobj.equals("d") || sobj.equals("r") || sobj.equals("%")
-		)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-			
+		return true;
 	}
+	else
+	{
+		return false;
+	}
+			
+    }
 	
-	public double CalculateExp(String p)
+    public double CalculateExp(String p)
     {
         String tokens[] = p.split(",");
 		
-		String i = "";
-		
-		ArrayList<String> token=new ArrayList<String>();
-		
-		for(int k = 0; k < tokens.length; k++) 
+	String i = "";
+
+	ArrayList<String> token=new ArrayList<String>();
+
+	for(int k = 0; k < tokens.length; k++) 
         {
-			token.add(tokens[k]);  // tokens from post fix form p actual tokens for calculation
-		}
+		token.add(tokens[k]);  // tokens from post fix form p actual tokens for calculation
+	}
 
         Stack<Double> s=new Stack<Double>();
-		double x,y;
+	double x,y;
 
         for(int j = 0; j < token.size(); j++) 
         {
-			i = token.get(j);
+	    i = token.get(j);
 			
-			if(isOperator(i))
+	    if(isOperator(i))
             {
                 if(i.equals("s") ||i.equals("c") ||i.equals("t") ||i.equals("l") || i.equals("I") || i.equals("R") || i.equals("!") || i.equals("d") || i.equals("r")) 
-				{
-					y = s.pop();
-					s.push(calculate(y,i));
-				}
-				else
-				{
-					y=s.pop();
-					x=s.pop();
-					s.push(calculate(x,y,i));
-				}
-			}
+		{
+			y = s.pop();
+			s.push(calculate(y,i));
+		}
+		else
+		{
+			y=s.pop();
+			x=s.pop();
+			s.push(calculate(x,y,i));
+		}
+	    }
             else
             {
-				s.push(Double.valueOf(i));
+		s.push(Double.valueOf(i));
             }
-		}
+	}
 	
-		double res = 1;
-		while(!s.empty()) 
+	double res = 1;
+	
+	while(!s.empty()) 
         {
-			res = s.pop();
-		}
-		return res; 
+		res = s.pop();
 	}
+	return res; 
+    }
 	
-	public double factorial(double y) 
+    public double factorial(double y) 
+    {
+	double fact = 1;
+	if(y == 0 || y == 1) 
 	{
-		double fact = 1;
-		if(y == 0 || y == 1) 
-		{
-			fact = 1;
-		}
-		else 
-		{
-			for(int i = 2; i <= y; i++) 
-			{
-				fact *= i;
-			}
-		}
-		return fact;
+		fact = 1;
 	}
-	
-	public String Stack()
+	else 
 	{
-		Stack<String> sStack = new Stack<String>();
+		for(int i = 2; i <= y; i++) 
+		{
+			fact *= i;
+		}
+	}
+	return fact;
+    }
+	
+    public String Stack()
+    {
+	Stack<String> sStack = new Stack<String>();
 
         String PostFix = "";
-		String temp = "";
+	String temp = "";
 
-        token.add(")");
-        sStack.push("(");
+	token.add(")");
+	sStack.push("(");
 
-        String i;
+	String i;
 
-        for(int j = 1; j < token.size(); j++)
-        {
+	for(int j = 1; j < token.size(); j++)
+	{
             i = token.get(j);
 
             if(i.equals("("))
@@ -754,103 +750,103 @@ class CalculatorFrame extends WindowAdapter implements ActionListener
 
         String tokenss[] = PostFix.split(",");
 		
-		for(int j = 0; j < tokenss.length; j++)
-		{
-			System.out.println(j + "  " + tokenss[j]);
-		}
-		
-		System.out.println("");
+	for(int j = 0; j < tokenss.length; j++)
+	{
+		System.out.println(j + "  " + tokenss[j]);
+	}
+
+	System.out.println("");
 		
         return PostFix;
-	}
+    }
 	
-	public double calculate(double x,double y,String c)
-	{
-		double res = 0;
-		
-		if(c.equals("-"))
-		{
-			res = x - y;
-		}
-		else if(c.equals("+"))
-		{
-			res = x + y;
-		}
-		else if(c.equals("*"))
-		{
-			res = x * y;
-		}
-		else if(c.equals("/"))
-		{
-			res = x / y;
-		}
-		else if(c.equals("%"))
-		{
-			res = x % y;
-		}
-		else if(c.equals("^"))
-		{
-			res = Math.pow(x,y);
-		}
-		else
-		{
-			res = 0;
-		}
+    public double calculate(double x,double y,String c)
+    {
+	double res = 0;
 
-		return res;
+	if(c.equals("-"))
+	{
+		res = x - y;
 	}
+	else if(c.equals("+"))
+	{
+		res = x + y;
+	}
+	else if(c.equals("*"))
+	{
+		res = x * y;
+	}
+	else if(c.equals("/"))
+	{
+		res = x / y;
+	}
+	else if(c.equals("%"))
+	{
+		res = x % y;
+	}
+	else if(c.equals("^"))
+	{
+		res = Math.pow(x,y);
+	}
+	else
+	{
+		res = 0;
+	}
+
+	return res;
+    }
 	
-	public double calculate(double y,String c) 
-	{
-		double res = 0;
-		
-		if(c.equals("l"))
-		{
-			res = Math.log10(y);
-		}
-		else if(c.equals("s"))
-		{
-			res= Math.sin(y);
-		}
-		else if(c.equals("c"))
-		{
-			res= Math.cos(y);
-		}
-		else if(c.equals("t"))
-		{
-			res = Math.tan(y);
-		}
-		else if(c.equals("R"))
-		{
-			res = Math.sqrt(y);
-		}
-		else if(c.equals("!"))
-		{
-			res = factorial(y);
-		}
-		else if(c.equals("d"))
-		{
-			res = y * 180 / 3.14;
-		}
-		else if(c.equals("r"))
-		{
-			res = y * 3.14/ 180;
-		}
-		/*else if(c.equals("i")) // inverse
-		{
-			res = Math.i(y);
-		}*/
-		else if(c.equals("I"))
-		{
-			res = Math.log(y); // log in 
-		}
-		else
-		{
-			res = 0;
-		}
+    public double calculate(double y,String c) 
+    {
+	double res = 0;
 
-		return res;
+	if(c.equals("l"))
+	{
+		res = Math.log10(y);
 	}
+	else if(c.equals("s"))
+	{
+		res= Math.sin(y);
+	}
+	else if(c.equals("c"))
+	{
+		res= Math.cos(y);
+	}
+	else if(c.equals("t"))
+	{
+		res = Math.tan(y);
+	}
+	else if(c.equals("R"))
+	{
+		res = Math.sqrt(y);
+	}
+	else if(c.equals("!"))
+	{
+		res = factorial(y);
+	}
+	else if(c.equals("d"))
+	{
+		res = y * 180 / 3.14;
+	}
+	else if(c.equals("r"))
+	{
+		res = y * 3.14/ 180;
+	}
+	/*else if(c.equals("i")) // inverse
+	{
+		res = Math.i(y);
+	}*/
+	else if(c.equals("I"))
+	{
+		res = Math.log(y); // log in 
+	}
+	else
+	{
+		res = 0;
+	}
+
+	return res;
+    }
 }
 
 class Calculator
